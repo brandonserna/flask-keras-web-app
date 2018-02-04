@@ -1,7 +1,5 @@
 # Image Classification web app using keras and flask
 
-URL: https://class-image.herokuapp.com
+Heroku deployed example of a keras model 
 
-Model: Resnet50
-
-Deployed on Heroku using gunicorn
+![](keras-flask.gif)
