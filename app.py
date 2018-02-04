@@ -19,6 +19,12 @@ def load_model():
     model = ResNet50(weights="imagenet")
 
 
+print(("* Loading Keras model and Flask starting server..."
+    "please wait until server has fully started"))
+    
+load_model()
+
+
 def prepare_image(image, target):
     # if the image mode is not RGB, convert it
     if image.mode != "RGB":
@@ -118,4 +124,4 @@ if __name__ == "__main__":
     print(("* Loading Keras model and Flask starting server..."
     "please wait until server has fully started"))
     load_model()
-    app.run(debug=True)
+    app.run()
