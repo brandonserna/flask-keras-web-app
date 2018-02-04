@@ -69,7 +69,7 @@ def predict():
     return flask.jsonify(data)
 
 
-@app.route("/home", methods=["POST", "GET"])
+@app.route("/", methods=["POST", "GET"])
 def home():
     # initialize the data dictionary that will be returned from the
     # view
