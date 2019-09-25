@@ -1,3 +1,4 @@
+import io
 from keras.applications import ResNet50
 from keras.preprocessing.image import img_to_array
 from keras.applications import imagenet_utils
@@ -5,27 +6,35 @@ from PIL import Image
 import numpy as np
 import flask
 from flask import request
-import io
 
 app = flask.Flask(__name__)
 model = None
 
 
 def load_model():
-    # load the pre-trained Keras model (here we are using a model
-    # pre-trained on ImageNet and provided by Keras, but you can
-    # substitute in your own networks just as easily)
+    """Load ResNet50 Keras model."""
     global model
     model = ResNet50(weights="imagenet")
 
 
-print(("* Loading Keras model and Flask starting server..."
-    "please wait until server has fully started"))
-    
 load_model()
 
 
 def prepare_image(image, target):
+    """Pre-process image to be ran with the model.
+
+    Parameters
+    ----------
+    image : BytesIO
+        Bytes object from user uploaded from interface
+    target : tuple
+        Image size to resize (244,244)
+
+    Returns
+    -------
+    image
+        Ready to ingest into keras model
+    """
     # if the image mode is not RGB, convert it
     if image.mode != "RGB":
         image = image.convert("RGB")
@@ -81,8 +90,8 @@ def home():
     # view
     data = {"success": False}
 
-    if request.method == 'GET':
-        return '''
+    if request.method == "GET":
+        return """
         <!doctype html>
         <title>Image Classification</title>
         <h1>Image Classification</h1>
@@ -92,12 +101,12 @@ def home():
         <p><input type=file name=file>
             <input type=submit value=Select Prediction Image>
         </form>
-        '''
-    
+        """
+
     # ensure an image was properly uploaded to our endpoint
     if flask.request.method == "POST":
         # read the image in PIL format
-        image = request.files['file'].read()
+        image = request.files["file"].read()
         image = Image.open(io.BytesIO(image))
 
         # preprocess the image and prepare it for classification
@@ -120,8 +129,13 @@ def home():
     # return the data dictionary as a JSON response
     return flask.jsonify(data)
 
+
 if __name__ == "__main__":
-    print(("* Loading Keras model and Flask starting server..."
-    "please wait until server has fully started"))
+    print(
+        (
+            "* Loading Keras model and Flask starting server..."
+            "please wait until server has fully started"
+        )
+    )
     load_model()
     app.run()
